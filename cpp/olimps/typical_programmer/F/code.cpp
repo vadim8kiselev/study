@@ -30,9 +30,9 @@ void gen(int pos)
 		}
 		if (ch %p2== h)
 			{
-				  for (int j = 0; j < (int)s.length(); j++) 
-		      	printf("%c", s[i]);
-	      	printf("\n");
+			for (int j = 0; j < (int)s.length(); j++) 
+		      		printf("%c", s[i]);
+	      		printf("\n");
 			}
 		return;
 	}
