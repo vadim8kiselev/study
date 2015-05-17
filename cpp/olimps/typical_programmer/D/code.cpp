@@ -67,7 +67,7 @@ void interpretator(string x){
 			else
 				--memory[flag];
 		}
-		else if (x[i] == '>')///////////flag
+		else if (x[i] == '>')
 		{
 			if (flag == 29999)
 				flag = 0;
@@ -84,7 +84,7 @@ void interpretator(string x){
 		else if (x[i] == '|')
 			flag = 0;
 		else if (x[i] == '^')
-			cout << tmp << endl;///////////////////////
+			cout << tmp << endl;
 		else if (x[i] == '$')
 			tmp = flag;
 		else if (x[i] == '[')
