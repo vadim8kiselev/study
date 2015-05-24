@@ -17,27 +17,30 @@ private:
 	};
 
 	Node* head;	
-	int sizeOfStack;  
+	 
 
 public:
 
-	Stack() : head(nullptr),sizeOfStack(0){}
+	Stack() : head(nullptr){}
 
 	bool empty(){
 		return head == nullptr;
 	}
 	
 	void push(Type value){
-		sizeOfStack++;
+		
 		head = new Node(value, head);
 	}
 
-	void pop(){		
-		if (empty()) return /*0*/;	
-		sizeOfStack--;
-		//Type val = head->value;
-		head = head->next;
-		//return val;
+	Type pop(){		
+		if (empty()) return ;	
+		
+		Node* tmp = head;
+		Type val = tmp->value;
+		head = tmp->next;
+		delete tmp;
+		return val;
+		
 	}
 	
 	Type top(){
