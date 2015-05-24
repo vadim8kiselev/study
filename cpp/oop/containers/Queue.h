@@ -18,18 +18,18 @@ private:
 
 	Node* head;
 	Node* tail;
-	int sizeOfQueue;
+	
 
 public:
 
-	Queue() : head(nullptr),tail(nullptr), sizeOfQueue(0){}
+	Queue() : head(nullptr),tail(nullptr){}
 
 	bool empty(){
 		return head == nullptr;
 	}
 
 	void put(Type value){
-		sizeOfQueue++;
+		
 		Node* ptr = tail;
 		tail = new Node(value);
 
@@ -39,14 +39,15 @@ public:
 			ptr->next = tail;
 	}
 
-	void get(){
-		if (empty()) return /*0*/;
-		sizeOfQueue--;
-		//Type val = head->value;
-		head = head->next;
+	Type get(){
+		if (empty()) return 0;
+		Node* tmp = head;
+		Type val = tmp->value;
+		head = tmp->next;
 		if (head == nullptr)
 			tail = nullptr;
-		//return val;
+		delete tmp;
+		return val;
 	}
 
 	Type show(){
