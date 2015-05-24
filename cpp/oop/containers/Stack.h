@@ -33,7 +33,7 @@ public:
 	}
 
 	Type pop(){		
-		if (empty()) return ;	
+		if (empty()) return 0;	
 		
 		Node* tmp = head;
 		Type val = tmp->value;
