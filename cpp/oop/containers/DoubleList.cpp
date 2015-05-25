@@ -84,7 +84,7 @@ void insert(int index, Type data,bool flag) {
    else {
       Node *cur = find(index);
       --size;
-      if (size == nullptr) {
+      if (size == 0) {
           head = nullptr;
           tail = nullptr;
       }
