@@ -1,1 +1,1 @@
-print sorted([input() for i in range(3)])[1]
+print sorted((input() for i in range(3)))[1]
