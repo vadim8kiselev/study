@@ -19,6 +19,7 @@ class list
                 Node* cur = head;
                 for (int i = 1; i < index; i++)
                      cur = cur->next;
+                return cur;
                                 
         }
 public:
