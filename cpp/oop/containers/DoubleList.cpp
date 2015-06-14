@@ -1,6 +1,7 @@
 template <class Type> 
 class doubleList {
         class Node {
+        public:
                 Type value;
                 Node *next, *prev;
                 Node(Type x) : value(x), next(nullptr), prev(nullptr) { }
