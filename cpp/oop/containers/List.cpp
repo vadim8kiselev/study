@@ -3,6 +3,7 @@ class list
 {
         class Node
         {
+        public:
                 Type value;
                 Node* next;
                 Node(Type x) : value(x), next(0) { }
