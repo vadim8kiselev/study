@@ -31,7 +31,7 @@ public:
 	void put(Type value){
 		
 		Node* ptr = tail;
-		tail = new Node(value);
+		tail = new Node(value,tail);
 
 		if (head == nullptr)
 			head = tail;
