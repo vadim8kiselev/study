@@ -41,7 +41,7 @@ public:
 void insert(int index, Type data) {
       if ((index < 1) || (index > size + 1))  {
           throw ListException("ListException: insert");
-          return 0;
+          return ;
       }                
            Node* newPtr = new Node(data);
            size = getLength() + 1;
