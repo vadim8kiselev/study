@@ -1,0 +1,1 @@
+# First summer practise (cpp)
