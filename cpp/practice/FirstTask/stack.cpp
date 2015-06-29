@@ -14,7 +14,7 @@ int main(){
 			getline (in,tmp);
 			for (int index = 0; index < (int)tmp.length(); index++)
 				if (!(base.find(tmp[index]) == string::npos))
-					stack.push(tmp[index]);			
+					st.push(tmp[index]);			
 		}
 	in.close();
 	
