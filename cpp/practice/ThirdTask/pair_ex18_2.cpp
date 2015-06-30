@@ -6,12 +6,12 @@ using namespace std;
 int main(){
 
 	ifstream in("input.txt");
-	int n; 
-	in >> n;
-	vector <pair<int, int>> v(n);
+	int size; 
+	in >> size;
+	vector <pair<int, int>> v(size);
 	
 	int x, y;
-	for (int i = 0; i < n; i++){
+	for (int i = 0; i < size; i++){
 		in >> x >> y;
 		v[i] = make_pair(x, y);
 	}

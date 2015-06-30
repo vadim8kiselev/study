@@ -4,12 +4,9 @@
 #include <string>
 using namespace std;
 
-ofstream out("output.txt");
-
-string a, b;
+string a, b; // i'm usually don't use the global
 
 struct Node{
-
 	string name;
 	string label;
 	int num;
@@ -17,9 +14,8 @@ struct Node{
 	void read(ifstream &in){
 		in >> name >> label >> num;
 	}
-
-	void show(){
-		if (name != a && name != b)
+	void show(ofstream &out){
+		if (name != a && name != b) // exceptions from conditions
 			out << name << " " << label << " " << num << endl;
 	}
 };
@@ -37,23 +33,25 @@ bool cmp(Node a, Node b){
 int main(){	
 
 	ifstream in("input.txt");
-	int n;
-	in >> n;
-	vector<Node> v;
-	while (n && in.peek() != EOF){
-		Node tmp;
-		tmp.read(in);
-		v.push_back(tmp);
-		n--;
-	}
+		int n;
+		in >> n;
+		vector<Node> v;
+		while (n && in.peek() != EOF){
+			Node tmp;
+			tmp.read(in);
+			v.push_back(tmp);
+			n--;
+		}
 	
-	in >> a >> b;
+		in >> a >> b;
 	in.close();
 
-	sort(v.begin(), v.end(), cmp);
+	sort(v.begin(), v.end(), cmp); // it's boring always using lambda-functions
 	
-	for (auto i : v)
-		i.show();
+	ofstream out("output.txt");
+
+		for (auto i : v)
+			i.show(out);
 
 	out.close();
 }
