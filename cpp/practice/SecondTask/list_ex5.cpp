@@ -5,7 +5,7 @@ using namespace std;
 
 int main(){
 	int size;
-	cin >> size; assert(size >= 0);
+	cin >> size; assert(size > 0);
 	int index; // index is k 
 	cin >> index; assert(index >= 0 && index < size);
 	list <int> l;	
@@ -17,7 +17,7 @@ int main(){
 	}		
 	assert(index > 0); // negative numbers shall not pass
 
-	if (!(index / size)){ // equal to index < size
+	if (!(index / size)){ // equal to index < size // rewrite if size can be equal zero
 		int id = 0;
 		for (list<int>::iterator i = l.end(); i != l.begin(); i--, id++)
 			if (!(id ^ index)){
