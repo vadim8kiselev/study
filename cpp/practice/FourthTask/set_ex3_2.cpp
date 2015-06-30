@@ -23,14 +23,13 @@ int main(){
 		}
 
 	in.close();
-
 	
 	ofstream out("output.txt");
 
 		for (int i = 0; i < v.size(); i++,out<<endl)
 			for (set<char>::iterator it = v[i].begin(); it != v[i].end(); it++)
-				// symbol is lower and have no UPPER copy in the same set
-				if (islower(*it) && !v[i].count(toupper(*it)))
+				// symbol is UPPER and have no lower copy in the same set
+				if (isupper(*it) && !v[i].count(tolower(*it)))
 					out << *it << " ";	
 
 	out.close();
