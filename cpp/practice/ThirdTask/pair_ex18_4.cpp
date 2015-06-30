@@ -7,14 +7,6 @@ double getLength(int x, int y){
 	return sqrt(double(x*x + y*y));
 }
 
-bool cmp(pair<int, int> a, pair<int, int> b){
-
-	if (getLength(a.first, a.second) <= getLength(b.first, b.second))
-		return true;
-		
-		return false;
-}
-
 int main(){	
 
 	ifstream in("input.txt");
