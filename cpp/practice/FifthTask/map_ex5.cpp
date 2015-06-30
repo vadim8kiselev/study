@@ -28,9 +28,6 @@ bool isDigit(string x){
 	but 001 or 0000024152 is digit
 */
 int main(){
-
-	
-
 	map <string, int> dictionary;
 
 	ifstream in("input.txt");
@@ -48,6 +45,7 @@ int main(){
 	in.close();
 
 	ofstream out("output.txt");
+	
 		for (map <string, int>::iterator it = dictionary.begin(); it != dictionary.end(); it++)
 			if (it->second == count && isDigit(it->first))	{				
 				//dictionary.erase(dictionary.find(it->first)); // not solved
