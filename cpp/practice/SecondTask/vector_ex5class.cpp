@@ -1,14 +1,11 @@
 #include <fstream>
-#include <iostream>
 #include <vector>
 #include <string>
 using namespace std;
 
 class Games{
-
 	string type;
 	string name;
-
 public:
 	
 	Games(string a, string b) : type(a), name(b){}
@@ -16,22 +13,16 @@ public:
 	string getType(){
 		return type;
 	}
-
 	string getName(){
 		return name;
 	}
-
 	void setQuest(){
 		name = "?" + name;
 	}
-
 	void print(ofstream &out){
 		out << type << " " << name << endl;
-
 	}
-
 };
-
 
 int main(){
 	
@@ -46,9 +37,9 @@ int main(){
 		}
 	in.close(); 
 	
-	for (auto &i : v)
-		if (!i.getType().compare("Quest"))
-			i.setQuest();
+	for (auto &i : v)   
+		if (!i.getType().compare("Quest")) // equal strings
+			i.setQuest(); // solve condition
 
 	swap(v[0], v[v.size() - 2]);
 	

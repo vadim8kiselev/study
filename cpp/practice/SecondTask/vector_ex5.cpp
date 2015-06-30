@@ -4,16 +4,16 @@ using namespace std;
 
 int main(){
 
-	int n;
-	cin >> n;
-	int k;
-	cin >> k;
-	vector <int> v(n);	
+	int size;
+	cin >> size;
+	int index;
+	cin >> index;
+	vector <int> v(size);
 
-	for (int i = 0; i < n; i++){
+	for (int i = 0; i < size; i++)
 		cin >> v[i];
-	}	
-	swap(v[0], v[k]);
+		
+	swap(v[0], v[index]); // no commentary
 
 	for (auto i : v)
 		cout << i << " ";

@@ -4,30 +4,28 @@
 using namespace std;
 
 int main(){
-
-	int n;
-	cin >> n;
-	int k;
-	cin >> k;
+	int size;
+	cin >> size; assert(size >= 0);
+	int index; // index is k 
+	cin >> index; assert(index >= 0 && index < size);
 	list <int> l;	
 
 	int tmp;
-	for (int i = 0; i < n; i++){
+	for (int i = 0; i < size; i++){
 		cin >> tmp;
 		l.push_back(tmp);
-	}	
-	
-	assert(k > 0);
+	}		
+	assert(index > 0); // negative numbers shall not pass
 
-	if (!(k / n)){
+	if (!(index / size)){ // equal to index < size
 		int id = 0;
 		for (list<int>::iterator i = l.end(); i != l.begin(); i--, id++)
-			if (id == k){
+			if (!(id ^ index)){
 				l.remove(*i);
 				break;
 			}			
 	}
-	else if (!(k ^ n))
+	else if (!(index ^ size)) // equal to index != size
 		l.pop_front();	
 
 	for (auto i : l)
