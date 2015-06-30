@@ -8,32 +8,29 @@ int main(){
 
 	ifstream in("input.txt");
 
-	int n;
-	in >> n;
-	vector< set<int> > v(n);
+		int size;
+		in >> size;
+		vector< set<int> > v(size);
 
-	int tmp;
-	for (int i = 0; i < n; i++){
-		in >> tmp;
-		while (tmp){
-			if (v[i].count(tmp % 10))
-				v[i].erase(tmp % 10);			
-			else
-				v[i].insert(tmp % 10);			
-			tmp /= 10;
+		int tmp;
+		for (int i = 0; i < size; i++){
+			in >> tmp;
+			while (tmp){
+				if (v[i].count(tmp % 10)) // if tmp%10 in v[i]
+					v[i].erase(tmp % 10); // "even-condition" -> erase			
+				else
+					v[i].insert(tmp % 10); // "odd-condition" -> insert			
+				tmp /= 10;
+			}
 		}
-	}
 
 	in.close();
 	
 	ofstream out("output.txt");
 
-	for (int i = 0; i < n; i++, out << endl)
-	{
-		out << i << " -> ";
-		for (set<int>::iterator it = v[i].begin(); it != v[i].end(); it++)
-			out << *it << " ";
-	}
+		for (int i = 0; i < size; i++, out << endl << i << " -> ")	
+			for (set<int>::iterator it = v[i].begin(); it != v[i].end(); it++)
+				out << *it << " ";	
 
 	out.close();
 }
