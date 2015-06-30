@@ -11,16 +11,15 @@ int main(){
 	
 	ifstream in("input.txt");
 		int tmp;
-		while (in >> tmp){
-			if (tmp > 0){
-			q.push(tmp);
-			}
-		}
+		while (in >> tmp)
+			if (tmp > 0) // positive condition
+				q.push(tmp);		
+		
 	in.close();
 	
 	while (!q.empty()){
-		if (q.front() & 1){
-			st.push(q.front());
+		if (q.front() & 1){ // odd condition 
+			st.push(q.front()); // push it in stack
 		}
 		q.pop();
 	}	
@@ -28,7 +27,7 @@ int main(){
 	
 		while (!st.empty()){
 			out << st.top() << " ";
-			st.pop();
+			st.pop(); // and print answer
 		}
 	
 	out.close();
