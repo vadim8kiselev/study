@@ -4,7 +4,6 @@
 #include <string>
 using namespace std;
 
-string a, b; // i'm usually don't use the global
 
 struct Node{
 	string name;
@@ -14,8 +13,7 @@ struct Node{
 	void read(ifstream &in){
 		in >> name >> label >> num;
 	}
-	void show(ofstream &out){
-		if (name != a && name != b) // exceptions from conditions
+	void show(ofstream &out){		
 			out << name << " " << label << " " << num << endl;
 	}
 };
@@ -24,34 +22,37 @@ bool cmp(Node a, Node b){
 	if (a.label.compare(b.label))
 		return a.label < b.label;
 	else
-		if (a.num > b.num)
-			return a.num > b.num;
-		else
-			return false;
+		return a.num > b.num;		
+}
+string x, y;
+bool isright(Node a){	
+		return a.name == x || a.name == y;
 }
 
-int main(){	
+int main(){
 
 	ifstream in("input.txt");
-		int n;
-		in >> n;
-		vector<Node> v;
-		while (n && in.peek() != EOF){
-			Node tmp;
-			tmp.read(in);
-			v.push_back(tmp);
-			n--;
-		}
-	
-		in >> a >> b;
+	int n;
+	in >> n;
+	vector<Node> v;
+	while (n && in.peek() != EOF){
+		Node tmp;
+		tmp.read(in);
+		v.push_back(tmp);
+		n--;
+	}
+
+	in >> x >> y;
 	in.close();
 
-	sort(v.begin(), v.end(), cmp); // it's boring always using lambda-functions
-	
+	v.erase(remove_if(v.begin(), v.end(), isright), v.end());
+
+	stable_sort(v.begin(), v.end(), cmp);
+
 	ofstream out("output.txt");
 
-		for (auto i : v)
-			i.show(out);
+	for (int i = 0; i < min(10, (int)v.size()); i++)
+		v[i].show(out);
 
 	out.close();
 }
