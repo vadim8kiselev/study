@@ -28,7 +28,7 @@ public:
 	}
 
 	void show(){
-		out << name<< " " << second_name<< " " << third_name<< " " << number<<endl;
+		out << name << " " << second_name << " " << third_name << " " << number << endl;
 	}
 };
 
@@ -38,34 +38,41 @@ inline bool compare(string a){
 }
 
 bool print(Sub a){
-	if (compare(a.getNumber())){
+	if (compare(a.getNumber()) ){
 		a.show();
 		return true;
 	}
 	return false;
 }
 
-int main(){	
+int main(){
 
 	ifstream in("input.txt");
-		int size;
-		in >> size;
-		vector <Sub> v;
-		string name, second_name, third_name, number;
-	
-		while (size && in.peek() != EOF){
-			in >> name >> second_name >> third_name >> number;
-			Sub tmp(name, second_name, third_name, number); // against setters
-			v.push_back(tmp);
-			size--;
-		}
-		in >> x >> y;
-	in.close();	
+	int size;
+	in >> size;
+	int n = size;
+	vector <Sub> v;
+	string name, second_name, third_name, number;
+
+	while (size && in.peek() != EOF){
+		in >> name >> second_name >> third_name >> number;
+		Sub tmp(name, second_name, third_name, number); // against setters
+		v.push_back(tmp);
+		size--;
+	}
+	in >> x >> y;
+	in.close();
 
 	// i'm trying to use "new" standart of c++
 	out << count_if(v.begin(), v.end(), [](Sub a){return compare(a.getNumber()); }) << endl;
 	// with lambda, anyway
 
 	// and once again
-	for_each(v.begin(), v.end(), print);
+	//for_each(v.begin(), v.end(), print);
+	
+	for (int i = 0; i < n; i++){
+		
+		if (compare(v[i].getNumber()))
+			out << i + 1 << "\n";
+	}
 }
