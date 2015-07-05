@@ -1,13 +1,21 @@
 #include <stack>
 #include <fstream>
 #include <iostream>
+#include <functional>
 #include <algorithm>
 #include <string>
 #include <vector>
 #include <iomanip>
 #include <time.h>
+#include "omp.h"
 
 using namespace std;
+
+// Initialization of constant
+#define SIZE  10000
+int START_RANGE = 0;
+int FINISH_RANGE = 9;
+//////////////////////////////
 
 class Node{
 	std::string name;
@@ -33,13 +41,38 @@ public:
 	~Node(){}
 };
 
-template <class Type> 
-class stack_array{
+template <class Type>
+class Stack_array{
+
+	Type *s;
+	int index;
+	int size;
+public:
+	Stack_array() : index(0), size(SIZE), s(new Type[SIZE]){ }
+
+	void  push(Type value)
+	{
+		if (index > size - 1) return;
+		s[index++] = value;
+	}
+	void pop()
+	{
+		if (index < 0) return;
+		--index;
+		return;
+	}
+	Type top()
+	{
+		if (index < 0) return;
+		return  s[size - 1];
+	}
+	bool empty() {
+		return index < 0;
+	}
 };
 
-
-template <class Type> 
-class stack_list{
+template <class Type>
+class Stack_list{
 private:
 
 	class Node{
@@ -56,20 +89,19 @@ private:
 
 public:
 
-	stack_list() : head(nullptr){}
+	Stack_list() : head(nullptr){}
 
 	bool empty(){
 		return head == nullptr;
 	}
 
 	void push(Type value){
-
 		head = new Node(value, head);
 	}
 
 	void pop(){
-		if (empty()) return ;
-		Node* tmp = head;		
+		if (empty()) return;
+		Node* tmp = head;
 		head = tmp->next;
 		delete tmp;
 	}
@@ -79,80 +111,32 @@ public:
 		return head->value;
 	}
 
-	~stack_list(){}
+	~Stack_list(){}
 };
 
+class Test{
+	virtual double gen() = 0;
+	virtual pair<double, double> test() = 0;
+	virtual double clear_box() = 0;
+};
 
 template <class Container>
-class test{
+class IntegerTest : public Test{
 	Container box;
-
-	double gen_int(const int &size, const int &start = 0, const int &finish = 9){
+	string name;
+	
+	double gen(){
 		srand((int)time(NULL));
 		double time = clock();
-		for (int index = 0; index < size; index++){
-			box.push(rand() % finish + start);
+		for (int index = 0; index < SIZE; index++){
+			box.push(rand() % FINISH_RANGE + START_RANGE);
 		}
 		return double(clock() - time) / CLOCKS_PER_SEC;
 	}
-	
-	double gen_string(const int &size){		
-		ifstream in("input.txt");
-		vector <string> words;
-		string tmp, trash;
-		int count = size;
-		while (count && in >> tmp){
-			getline(in, trash); // only first word pushing
-			words.push_back(tmp);
-			count--;
-		}
-		random_shuffle(words.begin(), words.end());
-		in.close();
 
-		double time = clock();
-		for (int index = 0; index < size; index++){			
-             box.push(words[index]);
-		}		
-		return double(clock() - time) / CLOCKS_PER_SEC;
-	}
-
-	double gen_class(const int &size){
-		ifstream in("input.txt");
-		vector <Node> objects;
-		Node tmp;
-		int count = size;
-		while (count && in.peek() != EOF){
-			tmp.read(in);
-			objects.push_back(tmp);
-			count--;
-		}
-		random_shuffle(objects.begin(), objects.end());
-		in.close();
-		
-		double time = clock();
-		for (int index = 0; index < size; index++){
-			box.push(objects[index]);
-		}
-		return double(clock() - time) / CLOCKS_PER_SEC;			
-	}
-
-	pair<double, double> test_int(const int &size, const int &start = 0, const int &finish = 9){
-		//return the average time to test the $size numbers (in the range)
-		double time_push = gen_int(size, start, finish);
-		double time_pop = clear_box();
-		return make_pair(time_push, time_pop);
-	}
-
-	pair<double, double> test_string(const int &size){
-		//return the average time to test the $size strings (made by dictionary)
-		double time_push = gen_string(size);
-		double time_pop = clear_box();
-		return make_pair(time_push, time_pop);
-	}
-
-	pair<double, double> test_class(const int &size){
-		//return the average time to test the $size objects of class
-		double time_push = gen_class(size);
+	pair<double, double> test(){
+		//return the average time to test the $SIZE numbers (in the range)
+		double time_push = gen();
 		double time_pop = clear_box();
 		return make_pair(time_push, time_pop);
 	}
@@ -162,102 +146,160 @@ class test{
 		while (!box.empty()){
 			box.pop();
 		}
-		return double(clock() - time)/CLOCKS_PER_SEC;
+		return double(clock() - time) / CLOCKS_PER_SEC;
 	}
 
-	// for print
-	string get_name_identify(){
-		string info = typeid(Container).name();
-		string answer = info.substr(info.find("sta"), info.find('<') - info.find("sta"));
-		return (answer == "char")?"string":answer;
-	}
-
-	int    get_id_type(){
-		string info = typeid(Container).name();
-		string type = info.substr(info.rfind('<') + 1, info.find('>', info.rfind('<')) - (info.rfind('<') + 1));;
-		char postfix = type[type.length() - 1];
-		return (postfix == 't') ? 0 : ((postfix == 'r') ? 1 : 2);
-	}
-
-	pair<double, double> test_container(const int &size, const int &start = 0, const int &finish = 9){
-		int id = get_id_type(); cout << id << endl;
-		switch (id){
-		case 0:   return test_int(size, start, finish); break;
-		case 1:   return test_string(size);             break;
-		case 2:   return test_class(size);              break;
-		}
-		return make_pair(-1.0, -1.0);
-
-	}
-	
 public:
-	
+	IntegerTest(string n) :name(n){}
 
-	void test_and_print(ofstream &out, const int &size, const int &start = 0, const int &finish = 9){
-		pair <double, double> time = test_container(size,start,finish);
-		out << setprecision(3) << fixed << "Time for " << get_name_identify() << " method PUSH is " << time.first << " and method POP is " << time.second << endl;
+	pair<string, pair<double, double>> operator ()(){
+		pair <double, double> time = test();
+		return make_pair(name, time);
 	}
 
 };
 
+template <class Container>
+class StringTest : public Test{
+	Container box;
+	string name;
 
+	double gen(){
+		ifstream in("input.txt");
+		vector <string> words;
+		string tmp, trash;
+		int count = SIZE;
+		while (count && in >> tmp){
+			getline(in, trash); // only first word pushing
+			words.push_back(tmp);
+			count--;
+		}
+		random_shuffle(words.begin(), words.end());
+		in.close();
+
+		double time = clock();
+		for (int index = 0; index < SIZE; index++){
+			box.push(words[index % (words.size() - 1)]);
+		}
+		return double(clock() - time) / CLOCKS_PER_SEC;
+	}
+
+	pair<double, double> test(){
+		//return the average time to test the $SIZE strings (made by dictionary)
+		double time_push = gen();
+		double time_pop = clear_box();
+		return make_pair(time_push, time_pop);
+	}
+
+	double clear_box(){
+		double time = clock();
+		while (!box.empty()){
+			box.pop();
+		}
+		return double(clock() - time) / CLOCKS_PER_SEC;
+	}
+
+public:
+	StringTest(string n) : name(n){}
+
+	pair<string, pair<double, double>> operator ()(){
+		pair <double, double> time = test();
+		return make_pair(name, time);
+	}
+
+};
+
+template <class Container>
+class ClassTest : public Test{
+	Container box;
+	string name;
+
+	double gen(){
+		ifstream in("input.txt");
+		vector <Node> objects;
+		Node tmp;
+		int count = SIZE;
+		while (count && in.peek() != EOF){
+			tmp.read(in);
+			objects.push_back(tmp);
+			count--;
+		}
+		random_shuffle(objects.begin(), objects.end());
+		in.close();
+
+		double time = clock();
+		for (int index = 0; index < SIZE; index++){
+			box.push(objects[index % (objects.size() - 1)]);
+		}
+		return double(clock() - time) / CLOCKS_PER_SEC;
+	}
+
+	pair<double, double> test(){
+		//return the average time to test the $SIZE objects of class
+		double time_push = gen();
+		double time_pop = clear_box();
+		return make_pair(time_push, time_pop);
+	}
+
+	double clear_box(){
+		double time = clock();
+		while (!box.empty()){
+			box.pop();
+		}
+		return double(clock() - time) / CLOCKS_PER_SEC;
+	}
+
+public:
+	ClassTest(string n) : name(n){}
+
+	pair<string, pair<double, double>> operator ()(){
+		pair <double, double> time = test();
+		return make_pair(name, time);
+	}
+};
 
 int main(){
 
-	// Initialization of containers
-		
-	/*stack       <int>    stack_int;
-	stack       <string> stack_str;
-	stack       <Node>   stack_node;
-
-	stack_list  <int>    stack_list_int;
-	stack_list  <string> stack_list_str;
-	stack_list  <Node>   stack_list_node;
-
-	stack_array <int>    stack_array_int;
-	stack_array <string> stack_array_str;
-	stack_array <Node>   stack_array_node;*/
-	////////////////////////////
-
-	
 	// Initialization of test's shell
-	
-	test<stack       <int>   > stack_int_test;	
-	test<stack       <string>> stack_str_test;
-	test<stack       <Node>  > stack_node_test;
 
-	test<stack_list  <int>   > stack_list_int_test;
-	test<stack_list  <string>> stack_list_str_test;
-	test<stack_list  <Node>  > stack_list_node_test;
+	IntegerTest<stack       <int>   >       stack_int_test("stack_int        "); //5
+	StringTest <stack       <string>>       stack_str_test("stack_str        "); //6
+	ClassTest  <stack       <Node>  >      stack_node_test("stack_class      "); //4
 
-	/*
-	test<stack_array <int>   > stack_array_int_test;
-	test<stack_array <string>> stack_array_str_test;
-	test<stack_array <Node>  > stack_array_node_test;
-	*/
+	IntegerTest<Stack_list  <int>   >  stack_list_int_test("stack_xlist_int  "); //8
+	StringTest <Stack_list  <string>>  stack_list_str_test("stack_xlist_str  "); //9
+	ClassTest  <Stack_list  <Node>  > stack_list_node_test("stack_xlist_class"); //7
+
+	IntegerTest<Stack_array <int>   > stack_array_int_test("stack_array_int  "); //2
+	StringTest <Stack_array <string>> stack_array_str_test("stack_array_str  "); //3
+	ClassTest  <Stack_array <Node>  >stack_array_node_test("stack_array_class"); //1
+
 	/////////////////////////////////
-	
-	
-	// Initialization of constant
-	int SIZE = 10000000;
-	int START_RANGE  = 10000;
-	int FINISH_RANGE = 90000;
-	//////////////////////////////
 
+	function<pair<string, pair<double, double>>()> array[9];
+	array[0] = stack_int_test;
+	array[1] = stack_str_test;
+	array[2] = stack_node_test;
+	array[3] = stack_list_int_test;
+	array[4] = stack_list_str_test;
+	array[5] = stack_list_node_test;
+	array[6] = stack_array_int_test;
+	array[7] = stack_array_str_test;
+	array[8] = stack_array_node_test;
+
+	vector < pair<string, pair<double, double>> > v; // Inception
+
+	//#pragma omp parallel for
+	for (int i = 0; i < 9; i++)
+		v.push_back(array[i]());
+
+	sort(v.begin(), v.end()); // Pure magic. It's sorting in lexicographic order
 
 	ofstream out("output.txt");
-	stack_int_test.test_and_print(out, SIZE);
-	stack_str_test.test_and_print(out, SIZE);
-	stack_node_test.test_and_print(out, SIZE);
 
-	stack_list_int_test.test_and_print(out, SIZE);
-	stack_list_str_test.test_and_print(out, SIZE);
-	stack_list_node_test.test_and_print(out, SIZE);
+	for (vector < pair<string, pair<double, double>> >::iterator it = v.begin(); it != v.end(); it++)
+		out << setprecision(3) << fixed << "Time for " << it->first << " method PUSH is " << it->second.first << " \tand method POP is " << it->second.second << endl;
 
-	/*stack_array_int_test.test_and_print(out, SIZE);
-	stack_array_str_test.test_and_print(out, SIZE);
-	stack_array_node_test.test_and_print(out, SIZE);*/
-	
 	out << endl;
 	return 0;
 }
