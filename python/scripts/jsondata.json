@@ -1,0 +1,14 @@
+{  
+   "general":{ 
+      "artifacts":"one.jar, two.war",
+      "skip-directory":"/some/dir",  
+      "restart-ui":"yes"
+   },
+   "executor":{
+      "command":"deploy",
+      "properties":"-Dsome.port=12345",
+      "override-name":"super-app",  
+      "sla":"file:///configs/sla.xml",
+      "tee":"/tee"
+   }
+}
