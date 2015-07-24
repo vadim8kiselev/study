@@ -1,4 +1,4 @@
-# Hack VK token for newbee
+# Hack VK token for newbie
 
 ##Plan:
 ####Open https://oauth.vk.com/authorize?client_id=3166113&response_type=token and press 'confirm'
