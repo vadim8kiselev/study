@@ -13,10 +13,10 @@ namespace Application
             int start  = int.Parse(ranges[0]);
             int finish = int.Parse(ranges[1]);
 
-            Console.Write("\nEnter the third value: ");
+            Console.Write("\nEnter the divider: ");
             int bound = int.Parse(Console.ReadLine());
 
-            Console.Write("\nEnter the main value: ");
+            Console.Write("\nEnter the left bound: ");
             int value = int.Parse(Console.ReadLine());
 
             start = Math.Max(start, value + 1);
