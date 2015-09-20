@@ -10,79 +10,53 @@ M обозначает вычисление максимума, m – миним
 */
 
 using System;
-using System.Linq;
 using System.IO;
-using System.Collections.Generic;
 
 namespace App
 {
     class MainClass
     {
-        static int findMainComma(string command){
+        static int findMainComma(string command)
+        {
+            if (command.Length > 1)
+            { 
+                int pointer = 0;
 
-            if (command.IndexOf(',') == command.LastIndexOf(','))
-                return command.IndexOf(',');
+                for (int index = 0; index < command.Length; index++)
+                {
+                    if (command[index] == '(')
+                        pointer++;
+                    else if (command[index] == ')')
+                        pointer--;
 
-            int count = 1;
-
-            // M ( m ( 3 , 5 ) , M ( 1 , 2 ) )
-            // 0 1 2 3 4...
-
-            for (int i = 4; i < command.Length; i++)
-            {
-                if (command[i] == '(')
-                    count++;
-                else if (command[i] == ')')
-                    count--;
-
-                if (count == 0)
-                    return i + 1;
+                    if (command[index] == ',' && pointer == 1 )
+                        return index;
+                }
             }
-
+            
             return -1;
         }
 
-        static int interpretate(string command, bool flag)
+        static int interpretate(string command)
         {
             int position = findMainComma(command);
 
             if (command[0] == 'M')
-            {
-                if (command.IndexOf(',') == command.LastIndexOf(','))
-                    return interpretate(command.Substring(2, command.Length - 3), true);                    
-                
-                return Math.Max(interpretate ( command.Substring(2, position - 2), true), interpretate ( command.Substring(position + 1, command.Length - 2 - position), true));
-            }
+                return Math.Max(interpretate(command.Substring(2, position - 2)), interpretate(command.Substring(position + 1, command.Length - 2 - position)));
+           
             else if (command[0] == 'm')
-            {
-                if (command.IndexOf(',') == command.LastIndexOf(','))
-                    return interpretate(command.Substring(2, command.Length - 3), false);                            
-
-                return Math.Min(interpretate ( command.Substring(2, position - 2), false), interpretate(command.Substring(position + 1, command.Length - 2 - position), false));
-            }
-            else
-            {
-                if (flag)
-                    return Math.Max(int.Parse(command.Substring(0, position)), int.Parse(command.Substring(position + 1, command.Length - 1 - position)));
-                else
-                    return Math.Min(int.Parse(command.Substring(0, position)), int.Parse(command.Substring(position + 1, command.Length - 1 - position)));                
-            }
+                return Math.Min(interpretate(command.Substring(2, position - 2)), interpretate(command.Substring(position + 1, command.Length - 2 - position)));
+            
+            return int.Parse(command);
         }
 
         public static void Main(string[] args)
         {
-            StreamReader input  = new StreamReader("D:\\path\\to\\project\\input.txt"); // must be changed
-            StreamWriter output = new StreamWriter("D:\\path\\to\\project\\output.txt");
+            StreamReader input  = new StreamReader("path\\to\\project\\input.txt"); // must be changed
+            StreamWriter output = new StreamWriter("path\\to\\project\\output.txt");
 
-            for (int i = 0; i < 5; i++)
-            {
-                string command = input.ReadLine();
-
-                bool flag = (command[0] == 'M') ? true : false;
-
-                output.WriteLine(interpretate(command, flag));
-            }
-
+            output.WriteLine(interpretate(input.ReadLine().Trim()));
+            
             input.Close();
             output.Close();
         }
