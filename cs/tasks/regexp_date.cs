@@ -13,7 +13,7 @@ namespace Application
 			                        @"\b(0[1-9]|1\d|2\d)[-/\\](02)[-/\\](\d\d(0[48]|[2468][048]|[13579][26])|([02468][048]|[13579][26])00)\b|" + 
 			                        @"\b(0[1-9]|1\d|2[0-8])[-/\\](02)[-/\\](\d\d(0[^048]|[13579][^26]|[2468][^048])|((0[^048]|[13579][^26]|[2468][^048])00))\b");	
 
-			MatchCollection matches = regex.Matches(data);
+			MatchCollection matches = date.Matches(data);
 
 			foreach (Match match in matches)
 			{
