@@ -2,8 +2,8 @@ stak segment stack 'stack'
   db 256 dup (?)
 stak ends
 data segment 'data'
-	value1 db 9h
-	value2 db 5h
+	value1 db 2h
+	value2 db 8h
 	next db '', 0Ah, 0Dh, '$'
 data ends
 code segment 'code'
