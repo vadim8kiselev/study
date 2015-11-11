@@ -3,8 +3,8 @@ stak segment stack 'stack'
 stak ends 
 
 data segment 'data'
-	value1 db 9h
-	value2 db 5h
+	value1 db 6h
+	value2 db 3h
 data ends
 
 code segment 'code'
