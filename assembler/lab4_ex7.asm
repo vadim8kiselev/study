@@ -10,22 +10,16 @@
 
 digitToString proc
 	pusha
-	mov cx, 0
 	mov bx, 10
-	mov si, 0
+	mov si, 3
 
 conv:	mov dx, 0
 	div bx                                       
-	push dx
-	inc cx
+	add dl, 30h
+	mov result[si], dl
+	dec si
 	cmp ax, 0
 	jne conv 
-
-insert:	pop dx
-	add dl, 30h
-	mov result[si], dl 
-	inc si                          
-	loop insert
 	
 	lea dx, result                            
 	mov ah, 09h
@@ -50,7 +44,7 @@ printArray endp
 
 ;////////////////////////////
 ;////////////////////////////
-                                                   
+
 main:                         
 	mov ax, @data
 	mov ds, ax
@@ -72,7 +66,7 @@ fill:	mov array[si], bx
 	mov ah, 09h
 	int 21h	
 		
-	mov result[1], ' '
+	mov result[2], ' '
 
 ;////////////////////////////
 	mov cx, 10
