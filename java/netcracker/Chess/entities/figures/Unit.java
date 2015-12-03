@@ -2,6 +2,9 @@ package entities.figures;
 
 import entities.Figure;
 
+import java.io.*;
+import java.util.Scanner;
+
 public enum Unit implements Figure {
 
     PAWN {
@@ -86,11 +89,17 @@ public enum Unit implements Figure {
     }
 
     private static void showTable(Unit unit) {
-        System.out.println(unit.name());
-        for (int index = 0; index < 8; index++) {
-            for (int jndex = 0; jndex < 8; jndex++)
-                System.out.print(board[index].charAt(jndex) + " ");
-            System.out.println();
+        try (PrintWriter output = new PrintWriter("/tmp/chess_answer.txt")){
+            output.println(unit.name());
+
+            for (int index = 0; index < 8; index++) {
+                for (int jndex = 0; jndex < 8; jndex++)
+                    output.print(board[index].charAt(jndex) + " ");
+                output.println();
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
+
     }
 }
