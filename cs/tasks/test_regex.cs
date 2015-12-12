@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Diagnostics;
 
 namespace Application
 {
@@ -66,7 +65,6 @@ namespace Application
 				}
 				String answer = data.ToString ().Trim ();
 				Console.WriteLine (answer);
-			
 		}
 	}
 }
