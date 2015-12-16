@@ -25,19 +25,19 @@ public class Desk {
         }
     }
 
-    public synchronized String getState() {
+    public String getState() {
         return String.format("%c%c%c%c%c%c%c%c%c",
                 desk[0][0], desk[0][1], desk[0][2],
                 desk[1][0], desk[1][1], desk[1][2],
                 desk[2][0], desk[2][1], desk[2][2]);
     }
 
-    public synchronized void setState(String state){
+    public void setState(String state){
         for (int index = 0; index < state.length(); index++)
             desk[index / 3][index % 3] = state.charAt(index);
     }
 
-    public synchronized boolean hasFreePlaces() {
+    public boolean hasFreePlaces() {
         for (int index = 0; index < 3; index++) {
             for (int jndex = 0; jndex < 3; jndex++) {
                 if (desk[index][jndex] == ' ')
@@ -47,7 +47,7 @@ public class Desk {
         return false;
     }
 
-    public synchronized boolean setPosition(int rows, int columns) {
+    public boolean setPosition(int rows, int columns) {
         if (desk[rows][columns] == ' ') {
             desk[rows][columns] = clientMark;
             return true;
@@ -55,7 +55,7 @@ public class Desk {
         return false;
     }
 
-    public synchronized void setRandomPosition() {
+    public void setRandomPosition() {
         while (true) {
             int place = (int) (Math.random() * 9);
             if (desk[place / 3][place % 3] == ' ') {
@@ -65,13 +65,11 @@ public class Desk {
         }
     }
 
-
-
-    private synchronized boolean checkLine(char a, char b, char c) {
+    private boolean checkLine(char a, char b, char c) {
         return (a == b) && (b == c);
     }
 
-    public synchronized int checkWinner() {
+    public int checkWinner() {
         for (int index = 0; index < 3; index++) {
             if (checkLine(desk[index][0], desk[index][1], desk[index][2]) && desk[index][0] == clientMark)
                 return 1;
