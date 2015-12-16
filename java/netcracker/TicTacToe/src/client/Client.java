@@ -37,7 +37,6 @@ public class Client {
                 out.writeUTF(choise);
                 out.flush();
 
-
                 boolean serverFirst = choise.charAt(0) == 'y';
 
                 desk = new Desk((serverFirst) ? 1 : 0);
@@ -92,9 +91,7 @@ public class Client {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
-
     }
 
     private static void clientStep() throws IOException{
@@ -132,17 +129,6 @@ public class Client {
                 state.charAt(0), state.charAt(1), state.charAt(2),
                 state.charAt(3), state.charAt(4), state.charAt(5),
                 state.charAt(6), state.charAt(7), state.charAt(8));
-        /*return String.format(
-                        "+-----+-----+-----+\n" +
-                        "|  %c  |  %c  |  %c  |\n" +
-                        "+-----+-----+-----+\n" +
-                        "|  %c  |  %c  |  %c  |\n" +
-                        "+-----+-----+-----+\n" +
-                        "|  %c  |  %c  |  %c  |\n" +
-                        "+-----+-----+-----+\n",
-                desk[0][0], desk[0][1], desk[0][2],
-                desk[1][0], desk[1][1], desk[1][2],
-                desk[2][0], desk[2][1], desk[2][2]);*/
     }
 
 }
