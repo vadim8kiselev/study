@@ -1,4 +1,4 @@
-package entities.figures;
+package entities;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -9,23 +9,26 @@ import java.util.Scanner;
  */
 public class Desk {
 
-    static StringBuilder[] board = new StringBuilder[8];
-    private int row;
-    private int column;
+    static char[][] board = new char[8][8];
 
-    static{
-        for (int index = 0; index < board.length; index++) {
-            board[index] = new StringBuilder("00000000");
+    static {
+        for (int index = 0; index < 8; index++) {
+            for (int jndex = 0; jndex < 8; jndex++) {
+                board[index][jndex] = '0';
+            }
         }
     }
 
-    public Desk(Scanner input){
+    private int row;
+    private int column;
+
+    public Desk(Scanner input) {
         this.row = 0;
         this.column = 0;
         for (int index = 0; index < 8; index++) {
             String line = input.next().replaceAll(" ", "");
             for (int jndex = 0; jndex < line.length(); jndex++) {
-                if (line.charAt(jndex) != '0' && line.charAt(jndex) != ' '){
+                if (line.charAt(jndex) != '0') {
                     row = index;
                     column = jndex;
                     break;
@@ -37,11 +40,12 @@ public class Desk {
     public void showTable(Unit unit) {
         try (PrintWriter output = new PrintWriter("/tmp/chess_answer.txt")) {
             output.println(unit.name());
+
             unit.setPath(row, column);
 
             for (int index = 0; index < 8; index++) {
                 for (int jndex = 0; jndex < 8; jndex++)
-                    output.print(board[index].charAt(jndex) + " ");
+                    output.print(board[index][jndex] + " ");
                 output.println();
             }
         } catch (IOException e) {
