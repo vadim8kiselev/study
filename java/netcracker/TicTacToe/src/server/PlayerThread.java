@@ -2,13 +2,18 @@ package server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class PlayerThread implements Runnable {
 
-    private Socket clientSocket = null;
+    DataInputStream in;
+    DataOutputStream out;
+    Desk desk;
+    String name;
+    private Socket clientSocket;
 
     public PlayerThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -18,122 +23,96 @@ public class PlayerThread implements Runnable {
     public void run() {
 
         try {
-            DataInputStream in = new DataInputStream(clientSocket.getInputStream());
-            DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
 
+            in = new DataInputStream(clientSocket.getInputStream());
+            out = new DataOutputStream(clientSocket.getOutputStream());
 
-            Desk desk = null;
-            out.writeUTF("I will go first? (yes/no)");
-            String choise = in.readUTF();
-            int winner = 0;
-
-            if (choise.charAt(0) == 'y') {
-
-                desk = new Desk(1);
-
-                while (desk.hasFreePlaces()) {
-
-                    desk.setRandomPosition();
-
-                    if ((winner = desk.checkWinner()) == -1 || !desk.hasFreePlaces()) {
-                        out.writeUTF("Game over");
-                        out.flush();
-                        break;
-                    } else {
-                        out.writeUTF("Continue");
-                        out.flush();
-                    }
-
-                    while (true) {
-                        out.writeUTF(desk.getState() + "Write two coordinates as \"x y\": ");
-                        out.flush();
-                        String request = in.readUTF();
-                        String[] points = request.split(" ");
-                        if (!desk.setPosition(Integer.parseInt(points[0]) - 1,
-                                Integer.parseInt(points[1]) - 1)) {
-                            out.writeUTF("Wrong position! Choose again");
-                            out.flush();
-                            continue;
-                        } else {
-                            out.writeUTF("Correct coordinates");
-                            break;
-                        }
-                    }
-
-                    if ((winner = desk.checkWinner()) == 1 || !desk.hasFreePlaces()) {
-                        out.writeUTF("Game over");
-                        out.flush();
-                        break;
-                    } else {
-                        out.writeUTF("Continue");
-                        out.flush();
-                    }
-                }
-            } else if (choise.charAt(0) == 'n') {
-
-                desk = new Desk(0);
-
-                while (desk.hasFreePlaces()) {
-
-                    out.writeUTF(desk.getState() + "Write two coordinates as \"x y\": ");
-                    out.flush();
-                    String request = in.readUTF();
-                    String[] points = request.split(" ");
-                    if (!desk.setPosition(Integer.parseInt(points[0]) - 1,
-                            Integer.parseInt(points[1]) - 1)) {
-                        out.writeUTF("Wrong position! Choose again");
-                        out.flush();
-                        continue;
-                    } else {
-                        out.writeUTF("Correct coordinates");
-                        out.flush();
-                    }
-
-                    if ((winner = desk.checkWinner()) == 1 || !desk.hasFreePlaces()) {
-                        out.writeUTF("Game over");
-                        out.flush();
-                        break;
-                    } else {
-                        out.writeUTF("Continue");
-                        out.flush();
-                    }
-
-                    desk.setRandomPosition();
-
-                    if ((winner = desk.checkWinner()) == -1 || !desk.hasFreePlaces()) {
-                        out.writeUTF("Game over");
-                        out.flush();
-                        break;
-                    } else {
-                        out.writeUTF("Continue");
-                        out.flush();
-                    }
-                }
-            } else {
-                return;
-            }
-
-            out.writeUTF(desk.getState());
+            out.writeUTF("What is your name?");
             out.flush();
+            this.name = in.readUTF();
 
-            if (winner == -1) {
-                out.writeUTF("I win!");
+            while (true) {
+                out.writeUTF("I will go first? (yes/no)");
                 out.flush();
-            } else if (winner == 1) {
-                out.writeUTF("You win!");
+                String choise = in.readUTF();
+                int winner = 0;
+
+                boolean serverFirst = choise.charAt(0) == 'y';
+
+                desk = new Desk((serverFirst) ? 1 : 0);
+
+                while (desk.hasFreePlaces()) {
+
+                    if (serverFirst) {
+                        serverStep();
+                    } else {
+                        clientStep();
+                    }
+
+                    if ((winner = desk.checkWinner()) == ((serverFirst) ? -1 : 1)
+                            || !desk.hasFreePlaces()) {
+                        break;
+                    }
+
+                    if (serverFirst) {
+                        clientStep();
+                    } else {
+                        serverStep();
+                    }
+
+                    if ((winner = desk.checkWinner()) == ((serverFirst) ? 1 : -1)) {
+                        break;
+                    }
+
+                }
+
+                out.writeUTF(desk.getState());
                 out.flush();
-            } else {
-                out.writeUTF("It's standoff!");
+
+                String win;
+                if (winner == -1) {
+                    win = "I win!";
+                } else if (winner == 1) {
+                    win = "You win!";
+                } else {
+                    win = "It's standoff!";
+                }
+                out.writeUTF(win);
                 out.flush();
+
+                out.writeUTF("Do you want to play again? (yes/no)");
+                out.flush();
+                if (in.readUTF().charAt(0) != 'y')
+                    break;
             }
-
-            in.close();
-            out.close();
 
         } catch (Exception error) {
-            System.err.println("tic_tac_toe.com - - [" +
+            error.printStackTrace();
+
+        } finally {
+            try {
+                in.close();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("tic_tac_toe.com - - [" +
                     new SimpleDateFormat("dd/MMM/Y:HH:mm:ss Z").format(Calendar.getInstance().getTime())
-                    + "] player has disconnect from the server");
+                    + "] " + name + "(" +
+                    clientSocket.getInetAddress().toString().substring(1) +
+                    ") has disconnect from the server");
         }
+    }
+
+    private void clientStep() throws IOException {
+        out.writeUTF("Write two coordinates as \"x y\": ");
+        out.flush();
+        desk.setState(in.readUTF());
+    }
+
+    private void serverStep() throws IOException {
+        desk.setRandomPosition();
+        out.writeUTF(desk.getState());
+        out.flush();
     }
 }

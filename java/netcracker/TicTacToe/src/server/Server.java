@@ -2,7 +2,6 @@ package server;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.concurrent.ExecutorService;
@@ -21,9 +20,10 @@ public class Server {
             while (true) {
                 Socket socket = serverSocket.accept();
 
-                System.err.println("tic_tac_toe.com - - [" +
-                        new SimpleDateFormat("dd/MMM/Y:HH:mm:ss Z").format(Calendar.getInstance().getTime())
-                        + "] new player has connection to the server");
+                System.out.println("tic_tac_toe.com - - [" +
+                        new SimpleDateFormat("dd/MMM/Y:HH:mm:ss Z").format(Calendar.getInstance().getTime()) +
+                        "] new player has connection from " +
+                        socket.getInetAddress().toString().substring(1));
 
                 threadPool.execute(new PlayerThread(socket));
             }

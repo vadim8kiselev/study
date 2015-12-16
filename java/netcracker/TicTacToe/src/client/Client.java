@@ -1,94 +1,148 @@
 package client;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.InputStreamReader;
+import server.Desk;
+
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.regex.Pattern;
 
 public class Client {
 
     static final int port = 8888;
     static final String address = "127.0.0.1";
 
+    static DataInputStream in;
+    static DataOutputStream out;
+    static BufferedReader input;
+    static Desk desk = null;
+
     public static void main(String[] args) {
         try {
             InetAddress ipAddress = InetAddress.getByName(address);
             Socket socket = new Socket(ipAddress, port);
 
-            DataInputStream in = new DataInputStream(socket.getInputStream());
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            in = new DataInputStream(socket.getInputStream());
+            out = new DataOutputStream(socket.getOutputStream());
 
-            BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+            input = new BufferedReader(new InputStreamReader(System.in));
 
-            String play;
             System.out.println(in.readUTF());
-            String choise = input.readLine();
-            out.writeUTF(choise);
+            out.writeUTF(input.readLine());
             out.flush();
 
-            if (choise.charAt(0) == 'y') {
+            while (true) {
+                System.out.println(in.readUTF());
+                String choise = input.readLine();
+                out.writeUTF(choise);
+                out.flush();
 
-                while (true) {
 
-                    play = in.readUTF();
-                    if (play.equals("Game over"))
-                        break;
+                boolean serverFirst = choise.charAt(0) == 'y';
 
-                    while (true) {
-                        System.out.println(in.readUTF());
-                        out.writeUTF(input.readLine());
-                        out.flush();
+                desk = new Desk((serverFirst) ? 1 : 0);
 
-                        String correct = in.readUTF();
-                        if (correct.charAt(0) == 'C') {
-                            break;
-                        } else {
-                            System.out.println(correct);
-                        }
+                while (desk.hasFreePlaces()) {
+
+                    if (serverFirst) {
+                        serverStep();
+
+                    } else {
+                        System.out.println(showDesk(desk.getState()));
+                        clientStep();
                     }
 
-                    play = in.readUTF();
-                    if (play.equals("Game over"))
+                    if (desk.checkWinner() == ((serverFirst) ? -1 : 1)
+                            || !desk.hasFreePlaces()) {
                         break;
-                }
-
-            } else if (choise.charAt(0) == 'n') {
-
-                while (true) {
-                    System.out.println(in.readUTF());
-                    out.writeUTF(input.readLine());
-                    out.flush();
-
-                    String correct = in.readUTF();
-
-                    if (correct.charAt(0) == 'W') {
-                        System.out.println(correct);
-                        continue;
                     }
 
-                    play = in.readUTF();
-                    if (play.equals("Game over"))
-                        break;
+                    if (serverFirst) {
+                        System.out.println(showDesk(desk.getState()));
+                        clientStep();
+                    } else {
+                        serverStep();
+                    }
 
-                    play = in.readUTF();
-                    if (play.equals("Game over"))
+                    if (desk.checkWinner() == ((serverFirst) ? 1 : -1)) {
                         break;
+                    }
                 }
 
-            } else {
-                return;
+                System.out.println(showDesk(in.readUTF()));
+                System.out.println(in.readUTF());
+
+                System.out.println(in.readUTF());
+                String repeat = input.readLine();
+                out.writeUTF(repeat);
+                out.flush();
+
+                if (repeat.charAt(0) != 'y')
+                    break;
             }
-            System.out.println(in.readUTF());
-            System.out.println(in.readUTF());
-
-            in.close();
-            out.close();
 
         } catch (Exception x) {
             System.err.println("Server was closed");
+            x.printStackTrace();
+
+        } finally {
+            try {
+                in.close();
+                out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
 
     }
+
+    private static void clientStep() throws IOException{
+        String request = in.readUTF();
+        while (true) {
+            System.out.println(request);
+            String coordinates = input.readLine();
+            String[] points = coordinates.split(" ");
+            if (!desk.setPosition(Integer.parseInt(points[0]) - 1,
+                    Integer.parseInt(points[1]) - 1)
+                    || !Pattern.compile("^\\d+ \\d+$").matcher(coordinates).matches() ) {
+                System.out.println("Wrong position! Choose again");
+                continue;
+            } else {
+                break;
+            }
+        }
+        out.writeUTF(desk.getState());
+        out.flush();
+    }
+
+    private static void serverStep() throws IOException {
+        desk.setState(in.readUTF());
+    }
+
+    private static String showDesk(String state){
+        return String.format(
+                        "+-----+-----+-----+\n" +
+                        "|  %c  |  %c  |  %c  |\n" +
+                        "+-----+-----+-----+\n" +
+                        "|  %c  |  %c  |  %c  |\n" +
+                        "+-----+-----+-----+\n" +
+                        "|  %c  |  %c  |  %c  |\n" +
+                        "+-----+-----+-----+\n",
+                state.charAt(0), state.charAt(1), state.charAt(2),
+                state.charAt(3), state.charAt(4), state.charAt(5),
+                state.charAt(6), state.charAt(7), state.charAt(8));
+        /*return String.format(
+                        "+-----+-----+-----+\n" +
+                        "|  %c  |  %c  |  %c  |\n" +
+                        "+-----+-----+-----+\n" +
+                        "|  %c  |  %c  |  %c  |\n" +
+                        "+-----+-----+-----+\n" +
+                        "|  %c  |  %c  |  %c  |\n" +
+                        "+-----+-----+-----+\n",
+                desk[0][0], desk[0][1], desk[0][2],
+                desk[1][0], desk[1][1], desk[1][2],
+                desk[2][0], desk[2][1], desk[2][2]);*/
+    }
+
 }
