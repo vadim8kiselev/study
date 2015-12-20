@@ -33,15 +33,4 @@ public class MessageManager {
             }
         }
     }
-
-    public void sendPrivatePacket(DatagramPacket response, String nickname) throws IOException {
-        String message = new String(response.getData());
-        User user = Data.getInstance().getUserByName(nickname);
-
-        if (!message.trim().equals("")) {
-            String sendData = user.getNickname() + ": " + message;
-            socket.send(new DatagramPacket(sendData.getBytes(), sendData.length(), user.getIp(), user.getPort()));
-
-        }
-    }
 }

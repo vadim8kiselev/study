@@ -4,8 +4,11 @@ import server.manager.CommandManager;
 import server.manager.MessageManager;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class Server {
 
@@ -24,27 +27,13 @@ public class Server {
                         = new DatagramPacket(receiveData, receiveData.length);
                 socket.receive(request);
 
-                String message = new String(request.getData()).trim();
+                if (isCommand(new String(request.getData()).trim())) {
 
-                StringBuilder spaces = new StringBuilder("");
-                for (int index = 0;
-                     index < 20 - message.length();
-                     index++)
-                    spaces.append(" ");
-
-                String log = "Received: " + message + spaces
-                        + " From: "
-                        + request.getAddress().toString().substring(1)
-                        + ":" + request.getPort();
-                if (isCommand(message)) {
-                    System.err.println(log);
-                }else{
-                    System.out.println(log);
-                }
-
-                if (isCommand(message)) {
+                    log(request, System.err);
                     commandManager.execute(request);
                 } else {
+
+                    log(request, System.out);
                     messageManager.sendPacket(request,
                             messageManager.checkUser(request));
                 }
@@ -56,5 +45,24 @@ public class Server {
 
     private static boolean isCommand(String str) {
         return str.charAt(0) == '/';
+    }
+
+    private static void log(DatagramPacket request, PrintStream source) {
+
+        String message = new String(request.getData()).trim();
+
+        String command = (source == System.out) ? " Received: " : " Execute : ";
+
+        if (command.equals(" Execute : ") && message.equals("/login")) {
+            command = " connect to the server";
+            message = "";
+        }
+
+        source.println("["
+                + new SimpleDateFormat("dd/MMM/Y:HH:mm:ss")
+                .format(Calendar.getInstance().getTime())
+                + "] From: "
+                + request.getAddress().toString().substring(1)
+                + ":" + request.getPort() + command + message);
     }
 }

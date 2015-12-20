@@ -27,7 +27,7 @@ public class WritingThread implements Runnable {
     public void run() {
         try {
             reader = new Scanner(System.in);
-
+            socket.send(new DatagramPacket("/login".getBytes(), 6, ip, port));
             while (true) {
                 sendData = reader.nextLine().getBytes();
                 socket.send(new DatagramPacket(sendData, sendData.length, ip, port));

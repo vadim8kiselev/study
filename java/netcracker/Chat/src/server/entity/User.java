@@ -54,7 +54,6 @@ public class User {
         return port;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o)
@@ -70,5 +69,4 @@ public class User {
     public int hashCode() {
         return (ip.toString() + ":" + port).hashCode();
     }
-
 }
