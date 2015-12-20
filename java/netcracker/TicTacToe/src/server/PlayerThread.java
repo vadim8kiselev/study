@@ -90,12 +90,22 @@ public class PlayerThread implements Runnable {
             error.printStackTrace();
 
         } finally {
+            clientSocket.close();
+            
             try {
-                in.close();
-                out.close();
+                if (in != null)
+                    in.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            
+            try {
+                if (out != null)
+                    out.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
             System.out.println("tic_tac_toe.com - - [" +
                     new SimpleDateFormat("dd/MMM/Y:HH:mm:ss Z").format(Calendar.getInstance().getTime())
                     + "] " + name + "(" +
