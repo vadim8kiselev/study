@@ -85,9 +85,18 @@ public class Client {
             x.printStackTrace();
 
         } finally {
+            socket.close();
+            
             try {
-                in.close();
-                out.close();
+                if (in != null)
+                    in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+            try {
+                if (out != null)
+                    out.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
