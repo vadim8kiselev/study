@@ -9,10 +9,10 @@ import java.util.Calendar;
 
 public class PlayerThread implements Runnable {
 
-    DataInputStream in;
-    DataOutputStream out;
-    Desk desk;
-    String name;
+    private DataInputStream in;
+    private DataOutputStream out;
+    private Desk desk;
+    private String name;
     private Socket clientSocket;
 
     public PlayerThread(Socket clientSocket) {
@@ -90,22 +90,27 @@ public class PlayerThread implements Runnable {
             error.printStackTrace();
 
         } finally {
-            clientSocket.close();
-            
+            try {
+                if (clientSocket != null)
+                    clientSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             try {
                 if (in != null)
                     in.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            
+
             try {
                 if (out != null)
                     out.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            
+
             System.out.println("tic_tac_toe.com - - [" +
                     new SimpleDateFormat("dd/MMM/Y:HH:mm:ss Z").format(Calendar.getInstance().getTime())
                     + "] " + name + "(" +

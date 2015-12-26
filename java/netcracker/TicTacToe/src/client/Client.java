@@ -9,13 +9,14 @@ import java.util.regex.Pattern;
 
 public class Client {
 
-    static final int port = 8888;
-    static final String address = "127.0.0.1";
+    private static final int port = 8888;
+    private static final String address = "127.0.0.1";
 
-    static DataInputStream in;
-    static DataOutputStream out;
-    static BufferedReader input;
-    static Desk desk = null;
+    private static DataInputStream in;
+    private static DataOutputStream out;
+    private static BufferedReader input;
+    private static Desk desk = null;
+    private static Socket socket = null;
 
     public static void main(String[] args) {
         try {
@@ -85,15 +86,20 @@ public class Client {
             x.printStackTrace();
 
         } finally {
-            socket.close();
-            
+            try {
+                if (socket != null)
+                    socket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             try {
                 if (in != null)
                     in.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            
+
             try {
                 if (out != null)
                     out.close();
@@ -103,7 +109,7 @@ public class Client {
         }
     }
 
-    private static void clientStep() throws IOException{
+    private static void clientStep() throws IOException {
         String request = in.readUTF();
         while (true) {
             System.out.println(request);
@@ -111,7 +117,7 @@ public class Client {
             String[] points = coordinates.split(" ");
             if (!desk.setPosition(Integer.parseInt(points[0]) - 1,
                     Integer.parseInt(points[1]) - 1)
-                    || !Pattern.compile("^\\d+ \\d+$").matcher(coordinates).matches() ) {
+                    || !Pattern.compile("^\\d+ \\d+$").matcher(coordinates).matches()) {
                 System.out.println("Wrong position! Choose again");
                 continue;
             } else {
@@ -126,7 +132,7 @@ public class Client {
         desk.setState(in.readUTF());
     }
 
-    private static String showDesk(String state){
+    private static String showDesk(String state) {
         return String.format(
                         "+-----+-----+-----+\n" +
                         "|  %c  |  %c  |  %c  |\n" +
