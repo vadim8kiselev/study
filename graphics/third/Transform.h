@@ -31,7 +31,7 @@ void convertPointToVector(point source, vector target);
 
 void convertVectorToPoint(vector source, point &target);
 
-void makeHomogenVec(double x, double y, vector target);//
+void makeHomogenVec(double x, double y, vector target);
 
 void unit(matrix target);
 
@@ -44,3 +44,5 @@ void scale(double size, matrix target);
 void reflectByHorizontal(matrix target, double width);
 
 void reflectByVertical(matrix target, double height);
+
+void rotateAroundPoint(double phi, matrix target, double x, double y);

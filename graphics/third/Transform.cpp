@@ -109,14 +109,31 @@ void scale(double size, matrix target)
 void reflectByHorizontal(matrix target, double width)
 {
 	unit(target);
-	target[0][0] = -1;
 	target[0][RANK - 1] = width;
+	target[0][0] = -1;
 }
 
 void reflectByVertical(matrix target, double height)
 {
 	unit(target);
-	target[1][1] = -1;
 	target[1][RANK - 1] = height;
+	target[1][1] = -1;
 }
 
+void rotateAroundPoint(double phi, matrix target, double x, double y)
+{
+	unit(target);
+
+	double c_angle = cos(phi);
+	double s_angle = sin(phi);
+
+	target[0][1] = -s_angle;
+	target[1][0] = s_angle;
+
+	target[0][0] = target[1][1] = c_angle;
+	target[2][0] = target[2][1] = 0; 
+	target[2][2] = 1;
+
+	target[0][2] = -x * c_angle + x + y * s_angle;
+	target[1][2] = -y * c_angle + y - x * s_angle;	
+}
