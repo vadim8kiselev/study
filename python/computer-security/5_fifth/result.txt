@@ -1,0 +1,4 @@
+C:\Program Files (x86)\Notepad++\notepad++.exe
+C:\Program Files (x86)\Notepad++\NppShell_04.dll
+C:\Program Files (x86)\Notepad++\SciLexer.dll
+C:\Program Files (x86)\Notepad++\uninstall.exe

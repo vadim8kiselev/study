@@ -4,7 +4,7 @@ import codecs
 source = raw_input('Enter the name of message file: ')
 
 with codecs.open(source, 'r', 'utf-8') as f:
-    message = f.read()[:-1]
+    message = f.read()
 
 
 # Source file

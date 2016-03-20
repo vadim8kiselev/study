@@ -18,9 +18,8 @@ for index in xrange(len(lines)):
 message = ''
 
 for byte in byte_array:
-    message += chr(byte)
-
-message += '\n'
+    if byte != 0:
+        message += chr(byte)
 
 # First way is writting into file 
 result_file = raw_input('Enter the name of result file: ')
