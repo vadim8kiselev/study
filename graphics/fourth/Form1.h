@@ -47,7 +47,7 @@ namespace GForm {
 			// 
 			this->openFileDialog->DefaultExt = L"txt";
 			this->openFileDialog->FileName = L"openFileDialog1";
-			this->openFileDialog->Filter = L"Òåêñòîâûå ôàéëû (*.txt)|*.txt|Âñå ôàéëû (*.*)|*.*";
+			this->openFileDialog->Filter = L"Ð¢ÐµÐºÑÑ‚Ð¾Ð²Ñ‹Ðµ Ñ„Ð°Ð¹Ð»Ñ‹ (*.txt)|*.txt|Ð’ÑÐµ Ñ„Ð°Ð¹Ð»Ñ‹ (*.*)|*.*";
 			this->openFileDialog->Title = L"Open file";
 			this->openFileDialog->FileOk += gcnew System::ComponentModel::CancelEventHandler(this, &Form1::openFileDialog1_FileOk);
 			// 
@@ -68,7 +68,7 @@ namespace GForm {
 			this->ClientSize = System::Drawing::Size(580, 500);
 			this->Controls->Add(this->btnOpen);
 			this->KeyPreview = true;
-			this->MinimumSize = System::Drawing::Size(500, 500);
+			this->MinimumSize = System::Drawing::Size(150, 130);
 			this->Name = L"Form1";
 			this->Text = L"Form1";
 			this->Load += gcnew System::EventHandler(this, &Form1::Form1_Load);
@@ -230,6 +230,9 @@ namespace GForm {
 				 matrix currentState;
 				 matrix variableState;
 				 Rectangle rect = Form::ClientRectangle;
+
+				 float width = rect.Width + left - right;
+				 float height = rect.Height + top - bottom;
 				 
 				 switch(e->KeyCode) {
 					case Keys::W :   move( 0, -1, currentState);   break;
@@ -248,20 +251,20 @@ namespace GForm {
 					case Keys::X :  scale(    1.1, currentState);  break;
 					case Keys::Z :  scale(1 / 1.1, currentState);  break;
 
-					case Keys::U :   reflectByHorizontal(currentState,  rect.Width); break;
-					case Keys::J :     reflectByVertical(currentState, rect.Height); break;
+					case Keys::U :   reflectByHorizontal(currentState, width); break;
+					case Keys::J :     reflectByVertical(currentState,  height); break;
 
-					case Keys::C : scaleAroundCenter(1.1 / 1, currentState, rect.Width, rect.Height, resultState, variableState); break;
-                    case Keys::V : scaleAroundCenter(1 / 1.1, currentState, rect.Width, rect.Height, resultState, variableState); break;
+					case Keys::C : scaleAroundCenter(1.1 / 1, currentState, width, height, resultState, variableState); break;
+                    case Keys::V : scaleAroundCenter(1 / 1.1, currentState, width,  height, resultState, variableState); break;
 
-					case Keys::R : rotateAroundPoint( 0.05, currentState, rect.Width, rect.Height, resultState, variableState); break;					
-					case Keys::Y : rotateAroundPoint(-0.05, currentState, rect.Width, rect.Height, resultState, variableState); break;
+					case Keys::R : rotateAroundPoint( 0.05, currentState, width, height, resultState, variableState); break;					
+					case Keys::Y : rotateAroundPoint(-0.05, currentState, width, height, resultState, variableState); break;
 					
-					case Keys::I : scaleByOneSide(1.1 / 1, currentState, rect.Width, rect.Height, false, resultState, variableState); break;
-                    case Keys::K : scaleByOneSide(1 / 1.1, currentState, rect.Width, rect.Height, false, resultState, variableState); break;
+					case Keys::I : scaleByOneSide(1.1 / 1, currentState, width, height, false, resultState, variableState); break;
+                    case Keys::K : scaleByOneSide(1 / 1.1, currentState, width, height, false, resultState, variableState); break;
 
-                    case Keys::O :  scaleByOneSide(1.1 / 1, currentState, rect.Width, rect.Height, true, resultState, variableState); break;
-                    case Keys::L :  scaleByOneSide(1 / 1.1, currentState, rect.Width, rect.Height, true, resultState, variableState); break;
+                    case Keys::O :  scaleByOneSide(1.1 / 1, currentState, width, height, true, resultState, variableState); break;
+                    case Keys::L :  scaleByOneSide(1 / 1.1, currentState, width, height, true, resultState, variableState); break;
 
 					case Keys::Escape : unit(currentState); unit(resultState); TurnCoordinates(); break;
 
