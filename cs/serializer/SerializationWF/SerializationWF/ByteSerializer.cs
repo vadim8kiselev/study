@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -19,9 +19,10 @@ namespace SerializationWF
 
         public Object Deserialize()
         {
+            String path = @"C:\data\BinaryFile.dat";
             try
             {
-                using (FileStream fstream = new FileStream(@"C:\data\BinaryFile.dat", FileMode.Open))
+                using (FileStream fstream = new FileStream(path, FileMode.Open))
                 {
                     return binaryFormatter.Deserialize(fstream);
                 }
@@ -30,6 +31,9 @@ namespace SerializationWF
             {
                 // sorry
                 return null;
+            } finally
+            {
+                File.Delete(path);
             }
         }
     }
