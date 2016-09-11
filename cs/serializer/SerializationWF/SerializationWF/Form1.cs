@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -38,8 +38,12 @@ namespace SerializationWF
         private void button3_Click_1(object sender, EventArgs e)
         {
             // xml deserialize
-            animal = (Animal)xmlSerializer.Deserialize();
-            AddOnSecondDataGridView(animal);
+            Object response = xmlSerializer.Deserialize();
+            if (response != null)
+            {
+                animal = (Animal)response;
+                AddOnSecondDataGridView(animal);
+            }
         }
 
         private void button4_Click_1(object sender, EventArgs e)
@@ -52,8 +56,12 @@ namespace SerializationWF
         private void button5_Click_1(object sender, EventArgs e)
         {
             // bytes deserialize
-            animal = (Animal)byteSerializer.Deserialize();
-            AddOnSecondDataGridView(animal);
+            Object response = byteSerializer.Deserialize();
+            if (response != null)
+            {
+                animal = (Animal)response;
+                AddOnSecondDataGridView(animal);
+            }
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -96,18 +104,12 @@ namespace SerializationWF
 
         private void AddOnFirstDataGridView(Animal animal)
         {
-            if (animal != null)
-            {
-                dataGridView1.Rows.Add(animal.GetTypeName(), animal.name, animal.height.ToString(), animal.weight.ToString());
-            }
+            dataGridView1.Rows.Add(animal.GetTypeName(), animal.name, animal.height.ToString(), animal.weight.ToString());
         }
 
         private void AddOnSecondDataGridView(Animal animal)
         {
-            if (animal != null)
-            {
-                dataGridView2.Rows.Add(animal.GetTypeName(), animal.name, animal.height.ToString(), animal.weight.ToString());
-            }
+            dataGridView2.Rows.Add(animal.GetTypeName(), animal.name, animal.height.ToString(), animal.weight.ToString());
         }
 
         private void button6_Click(object sender, EventArgs e)
