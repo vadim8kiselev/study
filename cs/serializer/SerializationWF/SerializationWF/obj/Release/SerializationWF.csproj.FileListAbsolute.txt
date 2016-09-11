@@ -1,0 +1,9 @@
+D:\Code\CSharpSSU\SerializationWF\SerializationWF\bin\Release\SerializationWF.exe.config
+D:\Code\CSharpSSU\SerializationWF\SerializationWF\bin\Release\SerializationWF.exe
+D:\Code\CSharpSSU\SerializationWF\SerializationWF\bin\Release\SerializationWF.pdb
+D:\Code\CSharpSSU\SerializationWF\SerializationWF\obj\Release\SerializationWF.Form1.resources
+D:\Code\CSharpSSU\SerializationWF\SerializationWF\obj\Release\SerializationWF.Properties.Resources.resources
+D:\Code\CSharpSSU\SerializationWF\SerializationWF\obj\Release\SerializationWF.csproj.GenerateResource.Cache
+D:\Code\CSharpSSU\SerializationWF\SerializationWF\obj\Release\SerializationWF.exe
+D:\Code\CSharpSSU\SerializationWF\SerializationWF\obj\Release\SerializationWF.pdb
+D:\Code\CSharpSSU\SerializationWF\SerializationWF\obj\Release\SerializationWF.csprojResolveAssemblyReference.cache
