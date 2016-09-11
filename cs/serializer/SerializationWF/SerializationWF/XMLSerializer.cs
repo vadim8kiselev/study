@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Xml.Serialization;
 
@@ -18,9 +18,10 @@ namespace SerializationWF
 
         public Object Deserialize()
         {
+            String path = @"C:\data\XMLFile.xml";
             try
             {
-                using (FileStream fstream = new FileStream(@"C:\data\XMLFile.xml", FileMode.Open))
+                using (FileStream fstream = new FileStream(path, FileMode.Open))
                 {
                     return xmlSerializer.Deserialize(fstream);
                 }
@@ -29,6 +30,9 @@ namespace SerializationWF
             {
                 // sorry
                 return null;
+            } finally
+            {
+                File.Delete(path);
             }
         }
     }
