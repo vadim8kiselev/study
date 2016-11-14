@@ -3,7 +3,7 @@ import codecs
 # Message file
 source = raw_input('Enter the name of message file: ')
 
-with codecs.open(source, 'r', 'utf-8') as f:
+with codecs.open(source, 'r') as f:
     message = f.read()
 
 
