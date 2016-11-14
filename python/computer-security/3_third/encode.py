@@ -16,9 +16,8 @@ with codecs.open(path, 'r', 'utf-8') as f:
 
 # Logic
 bit_mask = ''
-for byte in message:
-    for bit in xrange(8):
-        bit_mask += str((ord(byte) >> (7 - bit)) & 1)
+for symbol in message:
+    bit_mask += format(ord(symbol), 'b').zfill(8)
 
 state = 0
 for bit in bit_mask:
