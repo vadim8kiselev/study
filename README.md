@@ -1,2 +1,3 @@
+# @Deprecated
 # study
-Coding stuff
+God damn solutions and awful code in da house

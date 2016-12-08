@@ -1,1 +1,0 @@
-bool unclip(point &A, point &B, point min, point max);
