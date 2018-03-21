@@ -14,6 +14,7 @@ public class Task5 extends JFrame implements Task {
 
     @Override
     public Task solve() {
+        System.out.println("This task is not done yet");
         return this;
     }
 

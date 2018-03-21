@@ -7,18 +7,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.IntStream;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Task3 extends JFrame implements Task {
 
-    private static final int windowHeight = 530;
-
-    private static final int windowWidth = 500;
-
-    private List<Integer> counters = new ArrayList<>();
+    private List<Integer> data = new ArrayList<>();
 
     @Override
     public Task solve() {
@@ -30,43 +24,19 @@ public class Task3 extends JFrame implements Task {
                 value += new Random().nextInt(4); // 0 1 2 3
                 counter++;
             }
-
-            counters.add(counter);
+            data.add(counter);
         }
 
-        //mean = sum([f[i] * x[i] for i in xrange(n)]) / sum(f)
+        double mean = (data.stream()
+                .mapToInt(Integer::intValue)
+                .sum() + 0.0) / data.size();
 
-        int max = counters.stream().mapToInt(Integer::intValue).max().orElse(0);
-        int min = counters.stream().mapToInt(Integer::intValue).min().orElse(Integer.MAX_VALUE);
-
-        System.out.println(Math.ceil((max - min + 0.0) / counters.size()));
-
-
-
-        System.out.println("Math mean is " + 0);
-
-        System.out.println(counters.stream().mapToInt(Integer::intValue)
-                .average()
-                .orElse(-1.0));
+        System.out.println("Math mean is " + mean);
         return this;
     }
 
     @Override
     public void draw() {
-        Frame.draw(this, new DrawingComponent(), windowHeight, windowWidth);
-    }
-
-    class DrawingComponent extends JPanel {
-
-        @Override
-        protected void paintComponent(Graphics graphics) {
-            Graphics2D graphics2D = (Graphics2D) graphics;
-
-            graphics2D.drawPolyline(new int[]{0, 500, 495, 500, 495},
-                    new int[]{500, 500, 495, 500, 505}, 5); // x
-
-            graphics2D.drawPolyline(new int[]{5, 5, 0, 5, 10},
-                    new int[]{508, 0, 5, 0, 5}, 5); // y
-        }
+        // Skip for this task
     }
 }

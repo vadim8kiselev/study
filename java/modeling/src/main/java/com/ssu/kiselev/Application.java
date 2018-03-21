@@ -21,9 +21,9 @@ public class Application {
             case "2":
                 new Task2().solve().draw(); break;
             case "3":
-                new Task3().solve().draw(); break;
+                new Task3().solve(); break;
             case "4":
-                new Task4().solve().draw(); break;
+                new Task4().solve(); break;
             case "5":
                 new Task5().solve().draw(); break;
             case "6":

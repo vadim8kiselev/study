@@ -5,6 +5,8 @@ import com.ssu.kiselev.view.Frame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.security.SecureRandom;
+import java.util.Random;
 
 public class Task4 extends JFrame implements Task {
 
