@@ -1,0 +1,22 @@
+{
+    "name": "Space",
+    "priority": 1,
+    "initialState": [
+        "A"
+    ],
+    "finalState": [
+        "B"
+    ],
+    "matrixOfTransitions": {
+        "A": {
+            " ": [
+                "B"
+            ]
+        },
+        "B": {
+            " ": [
+                "B"
+            ]
+        }
+    }
+}

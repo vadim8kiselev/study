@@ -1,0 +1,7 @@
+lambda
+    string 1
+ (cond 193e3 193a3
+    01011010001010
+    01011111000101
+    01101
+    123 condlambda cond lambda)

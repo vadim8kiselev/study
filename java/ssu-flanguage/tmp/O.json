@@ -1,0 +1,20 @@
+{
+    "name": "OpenBracket",
+    "priority": 4,
+    "initialState": [
+        "A"
+    ],
+    "finalState": [
+        "B"
+    ],
+    "matrixOfTransitions": {
+        "A": {
+            "(": [
+                "B"
+            ]
+        },
+        "B": {
+            "(": []
+        }
+    }
+}

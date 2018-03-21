@@ -1,0 +1,20 @@
+{
+    "name": "CloseBracket",
+    "priority": 4,
+    "initialState": [
+        "A"
+    ],
+    "finalState": [
+        "B"
+    ],
+    "matrixOfTransitions": {
+        "A": {
+            ")": [
+                "B"
+            ]
+        },
+        "B": {
+            ")": []
+        }
+    }
+}
