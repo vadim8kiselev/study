@@ -37,7 +37,7 @@ public class Task4 extends JFrame implements Task {
 
         double standardDeviation = data.stream()
                 .mapToDouble(value -> Math.pow(value - expectedMean, 2))
-                .sum() / data.size(); // E((x - m) ^ 2) / n
+                .sum() / data.size(); // E[(x - m) ^ 2] / n
 
         System.out.println("Expected mean is " + expectedMean);
         System.out.println("Standard deviation is " + standardDeviation);
