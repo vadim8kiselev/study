@@ -3,14 +3,24 @@ package com.ssu.kiselev.task1;
 import com.ssu.kiselev.Task;
 import com.ssu.kiselev.view.Frame;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import javax.swing.*;
+import java.awt.*;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * 1.1. Дифференциальные уравнения первого порядка
+ *
+ * Задача 2. Температура свежевыпеченного хлеба равна 150 градусов.
+ * До отправки в магазин хлеб остывает в помещении с постоянной температурой 20 градусов.
+ * Требуется определить длительность времени охлаждения хлеба до 40 градусов.
+ *
+ * Результат можно получить с использованием закона теплового излучения
+ * dx/dt = -k * (x - a),
+ * где x(t) – температура хлеба в момент времени t , a – температура воздуха
+ * в помещении, k > 0 – коэффициент пропорциональности. Полагаем, что k = 0,02.
+ * */
 public class Task1 extends JFrame implements Task {
 
     private static final int windowHeight = 530;

@@ -6,6 +6,16 @@ import com.ssu.kiselev.view.Frame;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * 3.2. Сети массового обслуживания
+ *
+ * Задача 2. Сеть массового обслуживания состоит из двух последовательно
+ * связанных СМО типа M | M |1| 0 и M | M |1. Из источника требований в пер-
+ * вую СМО поступает пуассоновский поток требований с интенсивностью λ . За-
+ * тем требования переходят во вторую СМО. После обслуживания во второй сис-
+ * теме, требования возвращаются в источник. Построить имитационную модель
+ * сети обслуживания. На основании 1000 выборочных значений оценить u1 и u2.
+ * */
 public class Task7 extends JFrame implements Task {
 
     private static final int windowHeight = 530;
@@ -14,8 +24,7 @@ public class Task7 extends JFrame implements Task {
 
     @Override
     public Task solve() {
-        System.out.println("This task is not done yet");
-        return this;
+        throw new RuntimeException("This task is not done yet");
     }
 
     @Override

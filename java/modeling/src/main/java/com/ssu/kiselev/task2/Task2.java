@@ -3,19 +3,28 @@ package com.ssu.kiselev.task2;
 import com.ssu.kiselev.Task;
 import com.ssu.kiselev.view.Frame;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * 1.2. Системы дифференциальных уравнений
+ *
+ * Задача 14. Построить фазовый портрет системы дифференциальных
+ * уравнений
+ *
+ * dy/dt = x + a * y
+ * dx/dt = a * x - y,
+ *
+ * при − 0,2 < a < 0. Эксперимент повторить при a > 0 .
+ * */
 public class Task2 extends JFrame implements Task {
 
-    private static final int windowHeight = 530;
+    private static final int windowHeight = 600;
 
-    private static final int windowWidth = 500;
+    private static final int windowWidth = 550;
 
     private List<List<Double>> xCoordinates = new ArrayList<>();
 
@@ -61,6 +70,7 @@ public class Task2 extends JFrame implements Task {
     private Double function(double a, double x, double y) {
         return a * x - y;
     }
+
     private Double gunction(double x, double a, double y) {
         return x + a * y;
     }

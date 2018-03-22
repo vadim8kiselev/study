@@ -1,40 +1,63 @@
 package com.ssu.kiselev.task4;
 
 import com.ssu.kiselev.Task;
-import com.ssu.kiselev.view.Frame;
 
 import javax.swing.*;
-import java.awt.*;
-import java.security.SecureRandom;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.IntStream;
 
+/**
+ * 2.2. Нормально распределенная случайная величина
+ * <p>
+ * Задача 2. Вес коробки с печеньями есть нормально распределенная слу-
+ * чайная величина с параметрами µ =100 гр. и σ = 5 гр. Одна упаковка содержит
+ * 10 коробок с печеньями. Построить модель формирования веса одной упаковки.
+ * Оценить математическое ожидание и среднее квадратическое отклонение веса
+ * одной упаковки на основании 1000 испытаний.
+ */
 public class Task4 extends JFrame implements Task {
 
-    private static final int windowHeight = 530;
+    private static final Integer MEAN = 100;
 
-    private static final int windowWidth = 500;
+    private static final Integer SIGMA = 5;
+
+    private List<Double> data = new ArrayList<>();
 
     @Override
     public Task solve() {
+        for (int index = 0; index < 1000; index++) {
+            data.add(generatePack());
+        }
+
+        double expectedMean = data.stream()
+                .mapToDouble(Double::doubleValue)
+                .sum() / data.size(); // Ex / n
+
+        double standardDeviation = data.stream()
+                .mapToDouble(value -> Math.pow(value - expectedMean, 2))
+                .sum() / data.size();
+
+        System.out.println("Expected mean is " + expectedMean);
+        System.out.println("Standard deviation is " + standardDeviation);
         return this;
+    }
+
+    private double generatePack() {
+        return IntStream.range(1, 10).boxed()
+                .mapToDouble(index -> generateBox())
+                .sum();
+    }
+
+    private double generateBox() {
+        return (IntStream.range(1, 12).boxed()
+                .mapToDouble(index -> new Random().nextDouble())
+                .sum() - 6) * SIGMA + MEAN;
     }
 
     @Override
     public void draw() {
-        Frame.draw(this, new DrawingComponent(), windowHeight, windowWidth);
-    }
-
-    class DrawingComponent extends JPanel {
-
-        @Override
-        protected void paintComponent(Graphics graphics) {
-            Graphics2D graphics2D = (Graphics2D) graphics;
-
-            graphics2D.drawPolyline(new int[]{0, 500, 495, 500, 495},
-                    new int[]{500, 500, 495, 500, 505}, 5); // x
-
-            graphics2D.drawPolyline(new int[]{5, 5, 0, 5, 10},
-                    new int[]{508, 0, 5, 0, 5}, 5); // y
-        }
+        throw new RuntimeException("There is nothing to draw for this task");
     }
 }
