@@ -45,13 +45,13 @@ public class Task4 extends JFrame implements Task {
     }
 
     private double generatePack() {
-        return IntStream.range(1, 10).boxed()
+        return IntStream.range(0, 10).boxed()
                 .mapToDouble(index -> generateBox())
                 .sum();
     }
 
     private double generateBox() {
-        return (IntStream.range(1, 12).boxed()
+        return (IntStream.range(0, 12).boxed()
                 .mapToDouble(index -> new Random().nextDouble())
                 .sum() - 6) * SIGMA + MEAN;
     }

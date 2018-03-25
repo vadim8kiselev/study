@@ -79,15 +79,6 @@ public class Task1 extends JFrame implements Task {
                     generatePoints(coordinates.values(), windowHeight),
                     coordinates.keySet().size());
 
-            /*int xPoint = generatePoint(succeedPoints.keySet(), 0);
-            int yPoint = generatePoint(succeedPoints.values(), windowHeight);
-            int[] xx = {5, 500};
-            int[] yy = {yPoint, yPoint};
-            graphics2D.drawPolyline(xx,
-                    yy,
-                    xx.length);*/
-
-            int[] xPoints = generatePoints(succeedPoints.keySet(), 0);
             int[] yPoints = generatePoints(succeedPoints.values(), windowHeight);
             for (int yPoint : yPoints) {
                 graphics2D.drawPolyline(new int[]{5, 500},
@@ -103,10 +94,6 @@ public class Task1 extends JFrame implements Task {
                 coordinates[index++] = generatePoint(value, offset);
             }
             return coordinates;
-        }
-
-        private int generatePoint(Collection<Double> collection, Integer offset) {
-            return generatePoint(collection.iterator().next(), offset);
         }
 
         private int generatePoint(Double value, Integer offset) {
