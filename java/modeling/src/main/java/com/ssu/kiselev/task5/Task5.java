@@ -1,16 +1,13 @@
 package com.ssu.kiselev.task5;
 
 import com.ssu.kiselev.Task;
-import com.ssu.kiselev.view.Frame;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.Random;
-import java.util.stream.IntStream;
 
 /**
  * 2.3. Экспоненциально распределенная случайная величина
- *
+ * <p>
  * Задача 2. С момента появления первых признаков неисправности до пол-
  * ного отказа элемента проходит экспоненциально распределенный интервал
  * времени. Математическое ожидание этого интервала равно 1. Через равные ин-
@@ -19,8 +16,10 @@ import java.util.stream.IntStream;
  * дет заменен. На основании 1000 исходов (замена элемента или его отказ) оце-
  * нить вероятность того, что неисправность элемента не будет обнаружена при
  * проведении технического обслуживания и этот элемент выйдет из строя.
- * */
+ */
 public class Task5 extends JFrame implements Task {
+
+    private static final Integer COUNT = 1000;
 
     private static final Integer MEAN = 1;
 
@@ -30,7 +29,28 @@ public class Task5 extends JFrame implements Task {
 
     @Override
     public Task solve() {
-        System.out.println("Calculated probability is " + String.format("%.3f", 1 - PROBABILITY));
+
+        int numberOfBrokenDetails = 0;
+
+        for (int index = 0; index < COUNT; index++) {
+
+            double time = -Math.log(new Random().nextDouble()) * MEAN;
+
+            boolean isFixedOrChanged = false;
+
+            for (int interval = 0; interval < (int) (time / INTERVAL); interval++) {
+                if (new Random().nextDouble() < PROBABILITY) {
+                    isFixedOrChanged = true;
+                    break;
+                }
+            }
+
+            if (!isFixedOrChanged) {
+                numberOfBrokenDetails++;
+            }
+        }
+
+        System.out.println("Calculated probability is " + String.format("%.3f", (numberOfBrokenDetails + 0.0) / COUNT));
         return this;
     }
 

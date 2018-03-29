@@ -11,15 +11,15 @@ import java.util.List;
 
 /**
  * 1.2. Системы дифференциальных уравнений
- *
+ * <p>
  * Задача 14. Построить фазовый портрет системы дифференциальных
  * уравнений
- *
+ * <p>
  * dy/dt = x + a * y
  * dx/dt = a * x - y,
- *
+ * <p>
  * при − 0,2 < a < 0. Эксперимент повторить при a > 0 .
- * */
+ */
 public class Task2 extends JFrame implements Task {
 
     private static final int windowHeight = 600;

@@ -32,10 +32,10 @@ public class Application {
                 new Task5().solve();
                 break;
             case "6":
-                new Task6().solve().draw();
+                new Task6().solve();
                 break;
             case "7":
-                new Task7().solve().draw();
+                new Task7().solve();
                 break;
             default:
                 throw new RuntimeException("Error task number");
