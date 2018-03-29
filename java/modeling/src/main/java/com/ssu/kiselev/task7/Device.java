@@ -8,16 +8,13 @@ public class Device {
 
     private double resolveTime;
 
-    private final ExponentialDistribution exponentialDistribution;
-
-    public Device(ExponentialDistribution exponentialDistribution, Service service) {
-        this.exponentialDistribution = exponentialDistribution;
+    public Device(Service service) {
         this.service = service;
     }
 
-    public void processTask(Task task) {
+    public void processTask(Task task, double u) {
         this.currentTask = task;
-        this.resolveTime = this.currentTask.getStartResolveTime() + this.exponentialDistribution.getForExecution();
+        this.resolveTime = this.currentTask.getStartResolveTime() + (-1d / u) * Math.log(Math.random());
     }
 
     public Task resolveTask() {

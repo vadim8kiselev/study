@@ -8,8 +8,6 @@ public class TaskManager {
 
     private Queue<Task> taskQueue;
 
-    private ExponentialDistribution distribution;
-
     private int taskCount;
 
     private List<Service> services;
@@ -18,8 +16,7 @@ public class TaskManager {
 
     public TaskManager(int taskCount, double lambda, double u) {
         this.taskCount = taskCount;
-        this.distribution = new ExponentialDistribution(lambda, u);
-        this.taskQueue = tasksInit(currentTime);
+        this.taskQueue = tasksInit(currentTime, lambda);
         this.services = new ArrayList<>();
     }
 
@@ -27,11 +24,11 @@ public class TaskManager {
         services.add(service);
     }
 
-    private Queue<Task> tasksInit(double time) {
+    private Queue<Task> tasksInit(double time, double lambda) {
         Queue<Task> tasks = new PriorityQueue<>(taskCount);
 
         for (int i = 0; i < taskCount; i++) {
-            time += distribution.getForArrive();
+            time += (-1d / lambda) * Math.log(Math.random());
             Task task = new Task(time);
             tasks.add(task);
         }

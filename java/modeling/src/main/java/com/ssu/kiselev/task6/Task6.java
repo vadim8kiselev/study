@@ -19,9 +19,9 @@ public class Task6 implements Task {
 
         int DEVICE_COUNT = 2;
 
-        double LAMBDA = 0.3;   // speed of arriving new tasks
+        double LAMBDA = 0.2;   // speed of arriving new tasks
 
-        double U = 0.3;        // (nu) speed of handle tasks
+        double U = 0.2;        // (nu) speed of handle tasks
 
         new Service(COUNT_OF_TASKS, QUEUE_SIZE, DEVICE_COUNT, LAMBDA, U).run();
         return this;

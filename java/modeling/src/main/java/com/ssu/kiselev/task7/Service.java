@@ -14,8 +14,6 @@ public class Service {
 
     private final int deviceCount;
 
-    private final ExponentialDistribution exponentialDistribution;
-
     private final Queue<Task> tasks;
 
     private final Queue<Task> serviceQueue;
@@ -26,6 +24,8 @@ public class Service {
 
     private final Service nextService;
 
+    private final double u;
+
     public Service(Service nextService, int queueSize, int deviceCount, double lambda, double u) {
         this.currentTime = 0;
 
@@ -35,9 +35,9 @@ public class Service {
         this.queueSize = queueSize;
         this.deviceCount = deviceCount;
 
-        this.exponentialDistribution = new ExponentialDistribution(lambda, u);
+        this.u = u;
 
-        this.tasks = tasksInit(currentTime);
+        this.tasks = tasksInit(currentTime, lambda);
         this.serviceQueue = queueServiceInit();
         this.devices = devicesInit();
         this.resultQueue = resultQueueInit();
@@ -51,12 +51,12 @@ public class Service {
         tasks.add(task);
     }
 
-    private Queue<Task> tasksInit(double time) {
+    private Queue<Task> tasksInit(double time, double lambda) {
         if (count != 0) {
             Queue<Task> tasks = new PriorityQueue<>(count);
 
             for (int i = 0; i < count; i++) {
-                time += exponentialDistribution.getForArrive();
+                time += (-1d / lambda) * Math.log(Math.random());
                 Task task = new Task(time);
                 tasks.add(task);
             }
@@ -70,7 +70,7 @@ public class Service {
     private List<Device> devicesInit() {
         List<Device> devices = new ArrayList<>();
         for (int i = 0; i < deviceCount; i++) {
-            devices.add(new Device(exponentialDistribution, this));
+            devices.add(new Device(this));
         }
 
         return devices;
@@ -98,10 +98,6 @@ public class Service {
             Device device = deviceEndTimes.get(minDeviceEndTime);
             processDeviceResolveTaskEvent(device);
         }
-    }
-
-    private boolean isContinueWorking() {
-        return !tasks.isEmpty() || !serviceQueue.isEmpty() || devices.stream().anyMatch(device -> !device.isFinish());
     }
 
     private double getTaskArriveTime(Task task) {
@@ -153,13 +149,11 @@ public class Service {
     private void completeOldTask(Device device) {
         Task resolveTask = device.resolveTask();
         if (resolveTask != null) {
-            resultQueue.add(resolveTask);
-
-            // update arrive time
-            resolveTask.setArriveTime(0.0); // порчу предыдущую
-            // push to next service
             if (nextService != null) {
+                resolveTask.setArriveTime(currentTime);
                 nextService.addTask(resolveTask);
+            } else {
+                resultQueue.add(resolveTask);
             }
         }
     }
@@ -167,7 +161,7 @@ public class Service {
     private void executeNewTask(Device device, Task task) {
         if (task != null) {
             task.setStartResolveTime(currentTime);
-            device.processTask(task);
+            device.processTask(task, u);
             if (!isEmptyQueue()) {
                 serviceQueue.remove();
             }
